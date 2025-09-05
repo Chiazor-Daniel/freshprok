@@ -32,7 +32,7 @@ export function ProductDetailsDialog({
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
             <Package className="h-6 w-6 text-emerald-600" />
-            {product.name}
+            {product?.name}
           </DialogTitle>
           <DialogDescription>Product Details</DialogDescription>
         </DialogHeader>
@@ -59,25 +59,28 @@ export function ProductDetailsDialog({
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500">Price</label>
-              <p className="mt-1 text-lg font-semibold">₦{product.price.toLocaleString()}</p>
+             <p className="mt-1 text-lg font-semibold">
+  ₦{product?.price?.toLocaleString() ?? "0"}
+</p>
+
             </div>
           </div>
 
           <div>
             <label className="text-sm font-medium text-gray-500">Current Stock</label>
-            <p className="mt-1 text-lg font-semibold">{product.stock} units</p>
+            <p className="mt-1 text-lg font-semibold">{product?.stock} units</p>
           </div>
 
-          {product.description && (
+          {product?.description && (
             <div>
               <label className="text-sm font-medium text-gray-500">Description</label>
-              <p className="mt-1 text-gray-700">{product.description}</p>
+              <p className="mt-1 text-gray-700">{product?.description}</p>
             </div>
           )}
 
           <div>
             <label className="text-sm font-medium text-gray-500">Product ID</label>
-            <p className="mt-1 font-mono text-sm text-gray-600">{product.id}</p>
+            <p className="mt-1 font-mono text-sm text-gray-600">{product?.id}</p>
           </div>
         </div>
       </DialogContent>
