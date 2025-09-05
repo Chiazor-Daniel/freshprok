@@ -5,7 +5,15 @@ import { Plus, Search, Filter } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ProductDialog } from "@/components/stockpile/product-dialog";
+import { ProductDetailsDialog } from "@/components/stockpile/product-details-dialog";
 import { ProductTable } from "@/components/stockpile/product-table";
 import { useProducts } from "@/hooks/use-products";
 import type { Product } from "@/lib/types";
@@ -21,24 +29,37 @@ export default function ProductsPage() {
     isLoading,
   } = useProducts();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [productToEdit, setProductToEdit] = React.useState<Product | null>(
-    null
-  );
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = React.useState(false);
+  const [productToEdit, setProductToEdit] = React.useState<Product | null>(null);
+  const [productToView, setProductToView] = React.useState<Product | null>(null);
   const [recentlyUpdated, setRecentlyUpdated] = React.useState<string | null>(
     null
   );
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState<string>("all");
+
+  const categories = React.useMemo(() => {
+    const uniqueCategories = new Set(products.map(product => product.category));
+    return Array.from(uniqueCategories);
+  }, [products]);
 
   const filteredProducts = React.useMemo(() => {
-    return products.filter(product =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [products, searchTerm]);
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, selectedCategory]);
 
   const handleOpenDialog = (product?: Product) => {
     setProductToEdit(product || null);
     setIsDialogOpen(true);
+  };
+
+  const handleViewProduct = (product: Product) => {
+    setProductToView(product);
+    setIsDetailsDialogOpen(true);
   };
 
   const handleSaveProduct = (productData: Product) => {
@@ -81,7 +102,7 @@ export default function ProductsPage() {
           </Button>
         </div>
         
-        <div className="flex items-center gap-4 max-w-md">
+        <div className="flex items-center gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-emerald-500 h-4 w-4" />
             <Input
@@ -91,9 +112,19 @@ export default function ProductsPage() {
               className="pl-10 premium-input"
             />
           </div>
-          <Button variant="outline" className="rounded-lg border-emerald-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-200">
-            <Filter className="h-4 w-4 text-emerald-600" />
-          </Button>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </header>
       
@@ -110,6 +141,7 @@ export default function ProductsPage() {
           <ProductTable
             products={filteredProducts}
             onEdit={handleOpenDialog}
+            onView={handleViewProduct}
             onDelete={deleteProduct}
             onUpdateStock={handleUpdateStock}
             recentlyUpdated={recentlyUpdated}
@@ -122,6 +154,12 @@ export default function ProductsPage() {
         onOpenChange={setIsDialogOpen}
         onSave={handleSaveProduct}
         productToEdit={productToEdit}
+      />
+
+      <ProductDetailsDialog
+        isOpen={isDetailsDialogOpen}
+        onOpenChange={setIsDetailsDialogOpen}
+        product={productToView}
       />
     </div>
   );

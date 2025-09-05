@@ -10,6 +10,7 @@ import {
   TrendingUp,
   TrendingDown,
   Package,
+  Eye,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -53,6 +54,7 @@ interface ProductTableProps {
   products: Product[];
   onEdit: (product: Product) => void;
   onDelete: (id: string) => void;
+  onView: (product: Product) => void;
   onUpdateStock: (id: string, change: number) => void;
   recentlyUpdated: string | null;
 }
@@ -102,6 +104,7 @@ export function ProductTable({
   products,
   onEdit,
   onDelete,
+  onView,
   onUpdateStock,
   recentlyUpdated,
 }: ProductTableProps) {
@@ -202,6 +205,10 @@ export function ProductTable({
                          <StockManager onUpdateStock={(change) => onUpdateStock(product.id, change)} />
                       </PopoverContent>
                     </Popover>
+                    <DropdownMenuItem onClick={() => onView(product)} className="rounded-lg hover:bg-emerald-50 font-medium text-emerald-700 py-2">
+                      <Eye className="mr-2 h-4 w-4" />
+                      View Details
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onEdit(product)} className="rounded-lg hover:bg-emerald-50 font-medium text-emerald-700 py-2">
                       <Pencil className="mr-2 h-4 w-4" />
                       Edit

@@ -7,7 +7,7 @@ export const DUMMY_PRODUCTS: Product[] = [
     category: 'Vegetables', 
     quantity: 45, 
     price: 800, 
-    image: 'https://images.unsplash.com/photo-1546470427-e26264be0b0d?w=400&h=400&fit=crop&crop=center'
+    image: 'https://imgs.search.brave.com/oHDyJOSpv02EqmaBcFO5gS5gqXzZJHp_T1wmGAVEyHk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTEz/NTk5MDcvcGhvdG8v/Z3JvdXAtb2YtcmVk/LWZyZXNoLXRvbWF0/b2VzLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz00VEFsQVVO/dU9EOTlNaGQ2NEVC/QjZsQjNJZ2VYVVRN/QmpzOTA2cGJmS3Fj/PQ'
   },
   { 
     id: '2', 
