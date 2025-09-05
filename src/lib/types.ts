@@ -1,8 +1,10 @@
+// lib/types.ts
 export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  price?: number;
-  image?: string;
+  id: string
+  name: string
+  category?: string
+  price?: number
+  stock?: number   // ✅ added
+  description?: string
+  image?: string
 }
