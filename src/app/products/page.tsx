@@ -39,15 +39,23 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = React.useState<string>("all");
 
   const categories = React.useMemo(() => {
-    const uniqueCategories = new Set(products.map(product => product.category));
+    const uniqueCategories = new Set(
+      products
+        .map(product => product.category)
+        .filter((category): category is string => !!category) // Type guard to ensure we only get non-null categories
+    );
     return Array.from(uniqueCategories);
   }, [products]);
 
   const filteredProducts = React.useMemo(() => {
     return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      // Ensure category exists, default to empty string if undefined
+      const category = product.category || "";
+      const name = product.name || "";
+      
+      const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [products, searchTerm, selectedCategory]);

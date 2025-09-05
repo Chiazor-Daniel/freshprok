@@ -25,18 +25,20 @@ export default function DashboardPage() {
 
   const totalProducts = products.length;
   const totalStock = products.reduce(
-    (acc, product) => acc + product.quantity,
+    (acc, product) => acc + (product.quantity ?? 0),
     0
   );
   const totalValue = products.reduce(
-    (acc, product) => acc + product.quantity * (product.price || 0),
+    (acc, product) => acc + (product.quantity ?? 0) * (product.price ?? 0),
     0
   );
 
   const categoryDistribution = React.useMemo(() => {
     if (!products || products.length === 0) return [];
     const categoryCount = products.reduce((acc, product) => {
-      acc[product.category] = (acc[product.category] || 0) + 1;
+      if (product.category) { // Only count if category exists
+        acc[product.category] = (acc[product.category] || 0) + 1;
+      }
       return acc;
     }, {} as Record<string, number>);
 

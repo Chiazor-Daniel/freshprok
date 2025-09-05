@@ -7,4 +7,5 @@ export interface Product {
   stock?: number   // ✅ added
   description?: string
   image?: string
+  quantity?: number // ❌ removed
 }
